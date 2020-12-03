@@ -1,15 +1,18 @@
-class ApiExceptionModel {
-  ApiExceptionModel({
-    this.error,
-  });
+class ErrorResponse {
+  String message;
+  Null data;
 
-  String error;
+  ErrorResponse({this.message, this.data});
 
-  factory ApiExceptionModel.fromJson(Map<String, dynamic> json) => ApiExceptionModel(
-    error: json["error"],
-  );
+  ErrorResponse.fromJson(Map<String, dynamic> json) {
+    message = json['message'];
+    data = json['data'];
+  }
 
-  Map<String, dynamic> toJson() => {
-    "error": error,
-  };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['message'] = this.message;
+    data['data'] = this.data;
+    return data;
+  }
 }

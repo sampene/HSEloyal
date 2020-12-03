@@ -20,7 +20,7 @@ dependencies:
   http: 0.12.2
   convex_bottom_bar: ^2.6.0
   web3dart: ^1.2.3
-
+  qr_code_scanner: ^0.0.13
 
 
   # The following adds the Cupertino Icons font to your application.

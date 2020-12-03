@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:web3dart/contracts.dart';
 import 'package:web3dart/web3dart.dart';
@@ -23,10 +24,10 @@ abstract class ethAPI {
 class smartAPI implements ethAPI {
 
   Future<DeployedContract> loadContract() async {
-    String abiCode = "assets/abi.json";
+    String abiCode = await rootBundle.loadString("assets/abi.json");
     String contractAddress = "0xCc43bc89d05e9CdF33a479081e4F0CF154322AA4";
 
-    final contract = DeployedContract(ContractAbi.fromJson(abiCode, "TestCoin"),
+    final contract = DeployedContract(ContractAbi.fromJson(abiCode, "Loyal"),
         EthereumAddress.fromHex(contractAddress));
 
     return contract;

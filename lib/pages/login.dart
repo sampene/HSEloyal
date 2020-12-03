@@ -78,13 +78,12 @@ class _LoginPageState extends State<LoginPage> {
                   }
                   else if(state is LoginError){
                     Navigator.pop(context);
-                    displayDialog(state.message,"Couldnt login. Please check details well");
+                    displayDialog("Oops",state.message);
 
                   }
                   else if(state is LoginSuccess){
                     Navigator.pop(context);
                     navigateToHome(context);
-
                   }
                   },
                   child: Padding(
