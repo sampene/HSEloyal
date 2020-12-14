@@ -5,6 +5,7 @@ import 'package:loyal/pages/login.dart';
 import 'package:loyal/resources/my_colors.dart';
 import 'package:loyal/widgets/custom_appbar.dart';
 import 'package:loyal/widgets/dialog_progress.dart';
+import 'package:loyal/utils/bchain_functions.dart' as blockchain;
 
 class SignupPage extends StatefulWidget {
   @override
@@ -105,7 +106,8 @@ class _SignupPageState extends State<SignupPage> {
                     }
                     else if(state is SignupSuccess){
                       Navigator.pop(context);
-                      displayDialog(state.response.message,"Success. You have signed up in now");
+                      // displayDialog(state.response.message,"Success. You have signed up in now");
+                      navigateToLogin(context);
 
                     }
                   },
@@ -338,13 +340,17 @@ class _SignupPageState extends State<SignupPage> {
         });
   }
 
-  void _signup(BuildContext context) {
+  void _signup(BuildContext context) async {
+    var address = await blockchain.getKey();
     BlocProvider.of<SignupBloc>(context)
         .add(AttemptSignup(
         emailController.text.trim(),
         firstnameController.text.trim(),
         othernamesController.text.trim(),
-        passwordController.text.trim()));
+        passwordController.text.trim(),
+        address
+          ),
+        );
   }
 
   navigateToLogin(context) {

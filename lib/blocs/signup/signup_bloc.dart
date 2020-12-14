@@ -29,14 +29,13 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
       else
         yield SignupLoading();
 
-      SignupResponse rres = await api.signupUser(http.Client(), event.firstname, event.othernames, event.email, event.password);
+      SignupResponse rres = await api.signupUser(http.Client(), event.firstname, event.othernames, event.email, event.password, event.public_address);
       if (rres.message == "OK") {
         yield SignupSuccess(rres);
       }
       else{
         yield SignupError(rres.message);
       }
-
 
     }
   }

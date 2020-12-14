@@ -6,6 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loyal/models/login_response.dart';
 import 'package:loyal/network/api.dart';
 import 'package:http/http.dart' as http;
+import 'package:loyal/utils/utils.dart';
+
+import '../../main.dart';
 
 part 'login_event.dart';
 
@@ -30,6 +33,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       LoginResponse lgResponse = await api.loginUser(http.Client(), event.email, event.password);
       if(lgResponse.message == "OK") {
+        await sharedPreferences.setString(Keys.USER_ID, lgResponse.data.userId);
         yield LoginSuccess(lgResponse);
       }
       else{

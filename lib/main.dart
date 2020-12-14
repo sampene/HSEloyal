@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loyal/blocs/login/login_bloc.dart';
 import 'package:loyal/blocs/signup/signup_bloc.dart';
+import 'package:loyal/blocs/userinfo/user_info_bloc.dart';
 import 'package:loyal/network/api.dart';
+import 'package:loyal/pages/home.dart';
 import 'package:loyal/resources/my_colors.dart';
 import 'package:loyal/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,6 +22,7 @@ void main() async {
 }
 LoginBloc _loginbloc = LoginBloc(AppAPI());
 SignupBloc _signupbloc = SignupBloc(AppAPI());
+UserInfoBloc _userinfobloc = UserInfoBloc(AppAPI());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -29,6 +32,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<LoginBloc>(create: (BuildContext context) => _loginbloc),
         BlocProvider<SignupBloc>(create: (BuildContext context) => _signupbloc),
+        BlocProvider<UserInfoBloc>(create: (BuildContext context) => _userinfobloc),
       ],
       child: MaterialApp(
         title: 'Loyal',
@@ -82,7 +86,7 @@ Widget _getHome() {
       return WelcomeScreen();
     } else {
       //not first time. Take them to where they should go
-      return WelcomeScreen();
+      return HomePage(sharedPreferences.getString(Keys.USER_ID));
     }
   } else {
     setNotFirstTime();

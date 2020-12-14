@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loyal/resources/my_colors.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:sweetsheet/sweetsheet.dart';
 
 const flashOn = 'FLASH ON';
 const flashOff = 'FLASH OFF';
@@ -19,6 +20,7 @@ class QRScanner extends StatefulWidget {
 class _QRScannerState extends State<QRScanner> {
   var qrText = '';
   var flashState = flashOn;
+  var showingPopup = false;
   var cameraState = frontCamera;
   QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
@@ -37,7 +39,7 @@ class _QRScannerState extends State<QRScanner> {
               borderRadius: 10,
               borderLength: 30,
               borderWidth: 10,
-              cutOutSize: 300,
+              cutOutSize: 350,
             ),
           ),
           Padding(padding: EdgeInsets.all(8.0),child: Text('$qrText',style: TextStyle(backgroundColor: Colors.green, color: Colors.white, fontSize: 12),)),
@@ -123,9 +125,45 @@ class _QRScannerState extends State<QRScanner> {
     controller.scannedDataStream.listen((scanData) {
       setState(() {
         qrText = scanData;
+        if(!showingPopup){
+          loadpopup(qrText);
+        }
       });
     });
   }
+
+  loadpopup(String qrtext){
+    showingPopup = true;
+    final SweetSheet _sweetSheet = SweetSheet();
+    _sweetSheet.show(
+      context: context,
+      description: Text(
+        qrText,
+        style: TextStyle(color: Color(0xff2D3748)),
+      ),
+      color: CustomSheetColor(
+        main: Colors.white,
+        accent: Color(0xff5A67D8),
+        icon: Color(0xff5A67D8),
+      ),
+      icon: Icons.local_shipping,
+      positive: SweetSheetAction(
+        onPressed: () {
+          Navigator.of(context).pop();
+          showingPopup = false;
+        },
+        title: 'CONTINUE',
+      ),
+      negative: SweetSheetAction(
+        onPressed: () {
+          Navigator.of(context).pop();
+          showingPopup = false;
+        },
+        title: 'CANCEL',
+      ),
+    );
+  }
+
 
   @override
   void dispose() {

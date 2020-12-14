@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                   }
                   else if(state is LoginSuccess){
                     Navigator.pop(context);
-                    navigateToHome(context);
+                    navigateToHome(context, state.loginResponse.data.userId);
                   }
                   },
                   child: Padding(
@@ -239,11 +239,11 @@ class _LoginPageState extends State<LoginPage> {
           fullscreenDialog: false,
         ));
   }
-  navigateToHome(context) {
+  navigateToHome(context, String userId) {
     Navigator.push(
         context,
         MaterialPageRoute<LoginPage>(
-          builder: (BuildContext context) => HomePage(),
+          builder: (BuildContext context) => HomePage(userId),
           fullscreenDialog: false,
         ));
   }
