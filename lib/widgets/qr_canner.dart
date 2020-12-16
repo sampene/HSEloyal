@@ -1,7 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loyal/blocs/restaurants/restaurants_bloc.dart';
+import 'package:loyal/models/qr_data.dart';
+import 'package:loyal/models/restaurant_data.dart';
+import 'package:loyal/network/api.dart';
 import 'package:loyal/resources/my_colors.dart';
+import 'package:loyal/widgets/CustomBottomSheets.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:styled_text/styled_text.dart';
 import 'package:sweetsheet/sweetsheet.dart';
+import 'package:http/http.dart' as http;
 
 const flashOn = 'FLASH ON';
 const flashOff = 'FLASH OFF';
@@ -24,6 +34,15 @@ class _QRScannerState extends State<QRScanner> {
   var cameraState = frontCamera;
   QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  AppAPI api;
+  Restaurant_Data restaurantData;
+
+  @override
+  void initState() {
+    gettheRestaurants();
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -132,29 +151,59 @@ class _QRScannerState extends State<QRScanner> {
     });
   }
 
-  loadpopup(String qrtext){
+  QR_Data parseQRData(String text) {
+    final parsed = jsonDecode(text);
+    QR_Data rr = QR_Data.fromJson(parsed);
+    return rr;
+  }
+  Restaurants getRestaurantNameByAddress(String address){
+    for(var restaurant in restaurantData.restaurants){
+      if(restaurant.ethAddress == address){
+        return restaurant;
+      }
+    }
+  }
+
+  loadpopup(String qrtext) async{
+    QR_Data data = parseQRData(qrtext);
+
+    Restaurants rr = getRestaurantNameByAddress(data.address);
+
     showingPopup = true;
-    final SweetSheet _sweetSheet = SweetSheet();
+    final CustomSweetSheet _sweetSheet = CustomSweetSheet();
     _sweetSheet.show(
       context: context,
-      description: Text(
-        qrText,
-        style: TextStyle(color: Color(0xff2D3748)),
+      description: StyledText(
+        text: '<boldgrey>Total Sum: ${data.sum} Rubles</boldgrey> '
+            '<br/><boldgrey>Points to gain: ${data.cashBack} points,</boldgrey>'
+            '<br/> Click continue to make purchase or cancel to cancel purchase.'
+        ,
+        styles: {
+          'boldgrey': TextStyle(
+              // fontFamily: "Fatface",
+              fontSize: 18,
+              color: MyColors.primaryColor),
+          'heavyblueblack': TextStyle(
+              // fontFamily: "Bebas",
+              fontSize: 20,
+              color: MyColors.heavyblueblack),
+        },
       ),
-      color: CustomSheetColor(
+      title: Text('${rr.name} (${rr.neighborhood})', style: TextStyle(color: MyColors.heavyblueblack),),
+      color: CustomBottomSheetColor(
         main: Colors.white,
-        accent: Color(0xff5A67D8),
-        icon: Color(0xff5A67D8),
+        accent: MyColors.green,
+        icon: MyColors.green,
       ),
-      icon: Icons.local_shipping,
-      positive: SweetSheetAction(
+      icon: Icons.local_cafe,
+      positive: CustomSweetSheetAction(
         onPressed: () {
           Navigator.of(context).pop();
           showingPopup = false;
         },
         title: 'CONTINUE',
       ),
-      negative: SweetSheetAction(
+      negative: CustomSweetSheetAction(
         onPressed: () {
           Navigator.of(context).pop();
           showingPopup = false;
@@ -163,6 +212,12 @@ class _QRScannerState extends State<QRScanner> {
       ),
     );
   }
+
+
+  gettheRestaurants() async {
+    api = new AppAPI();
+    restaurantData = await api.getRestaurants(http.Client());
+}
 
 
   @override

@@ -5,8 +5,8 @@ abstract class LoginEvent extends Equatable{
 }
 
 class AttemptLogin extends LoginEvent{
-  String email, password;
-  AttemptLogin( this.email, this.password);
+  String email, password, publicKey;
+  AttemptLogin( this.email, this.password, this.publicKey);
 
   @override
   List<Object> get props => [];

@@ -1,21 +1,24 @@
 import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:loyal/blocs/exceptions/base_exception.dart';
 import 'package:loyal/blocs/exceptions/server_exception.dart';
 import 'package:loyal/blocs/login/login_bloc.dart';
 import 'package:loyal/models/login_response.dart';
+import 'package:loyal/models/restaurant_data.dart';
 import 'package:loyal/models/signup_response.dart';
 import 'package:loyal/models/userinfo_response.dart';
 import 'package:loyal/network/api_exception_model.dart';
 
 abstract class API {
   Future<LoginResponse> loginUser(
-      http.Client client, String email, String password);
+      http.Client client, String email, String password, String privateKey);
 
   Future<SignupResponse> signupUser(http.Client client, String lastname,
       String othernames, String email, String password, String eth_address);
 
   Future<UserInfoResponse> getUser(http.Client client, String userID);
+  Future<Restaurant_Data> getRestaurants(http.Client client);
 }
 
 class AppAPI implements API {
@@ -44,13 +47,26 @@ class AppAPI implements API {
     UserInfoResponse rr = UserInfoResponse.fromJson(parsed);
     return rr;
   }
+  Restaurant_Data parseRestaurants(String responseBody) {
+    final parsed = jsonDecode(responseBody);
+    Restaurant_Data rr = Restaurant_Data.fromJson(parsed);
+    return rr;
+  }
+
+
+  Future<String> loadlocalRestaurants() async {
+    String json = await rootBundle.loadString('assets/restaurants.json');
+    return json;
+  }
 
   @override
-  Future<LoginResponse> loginUser(http.Client client, email, password) async {
+  Future<LoginResponse> loginUser(http.Client client, email, password, publicKey) async {
+
+
     Map data = {
       'email': email,
       'password': password,
-      'eth_address': "0x42Ab9c9E8BDBB7bACA96C8ea6aa252e72D8004D2",
+      'eth_address': publicKey,
     };
 
     final response = await http.post(baseUrl + "/tokens",
@@ -121,5 +137,14 @@ class AppAPI implements API {
     else{
     return parseUserResponse(response.body);
     }
+  }
+
+  @override
+  Future<Restaurant_Data> getRestaurants(http.Client client) async {
+
+    String body = await loadlocalRestaurants();
+    return parseRestaurants(body);
+
+
   }
 }

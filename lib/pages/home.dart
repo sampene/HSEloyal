@@ -9,6 +9,7 @@ import 'package:loyal/blocs/smartAPI.dart';
 import 'package:loyal/blocs/userinfo/user_info_bloc.dart';
 import 'package:loyal/models/userinfo_response.dart';
 import 'package:loyal/pages/login.dart';
+import 'package:loyal/pages/restaurantslist.dart';
 import 'package:loyal/pages/signup.dart';
 import 'package:loyal/resources/my_colors.dart';
 import 'package:loyal/resources/my_dimens.dart';
@@ -152,9 +153,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          Container(
-            color: MyColors.accentColor,
-          ),
+          RestaurantListPage(),
           Container(
             color: MyColors.boldgrey,
           ),

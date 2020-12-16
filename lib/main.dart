@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loyal/blocs/login/login_bloc.dart';
+import 'package:loyal/blocs/restaurants/restaurants_bloc.dart';
 import 'package:loyal/blocs/signup/signup_bloc.dart';
 import 'package:loyal/blocs/userinfo/user_info_bloc.dart';
 import 'package:loyal/network/api.dart';
@@ -23,6 +24,7 @@ void main() async {
 LoginBloc _loginbloc = LoginBloc(AppAPI());
 SignupBloc _signupbloc = SignupBloc(AppAPI());
 UserInfoBloc _userinfobloc = UserInfoBloc(AppAPI());
+RestaurantsBloc _restobloc = RestaurantsBloc(AppAPI());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -33,6 +35,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<LoginBloc>(create: (BuildContext context) => _loginbloc),
         BlocProvider<SignupBloc>(create: (BuildContext context) => _signupbloc),
         BlocProvider<UserInfoBloc>(create: (BuildContext context) => _userinfobloc),
+        BlocProvider<RestaurantsBloc>(create: (BuildContext context) => _restobloc..add(FetchRestaurants())),
       ],
       child: MaterialApp(
         title: 'Loyal',

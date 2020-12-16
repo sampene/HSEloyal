@@ -31,7 +31,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
      else
       yield LoginLoading();
 
-      LoginResponse lgResponse = await api.loginUser(http.Client(), event.email, event.password);
+      LoginResponse lgResponse = await api.loginUser(http.Client(), event.email, event.password, event.publicKey);
       if(lgResponse.message == "OK") {
         await sharedPreferences.setString(Keys.USER_ID, lgResponse.data.userId);
         yield LoginSuccess(lgResponse);

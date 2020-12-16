@@ -20,7 +20,7 @@ class SignupResponse {
 }
 
 class Data {
-  int userId;
+  String userId;
   String accessToken;
 
   Data({this.userId, this.accessToken});
