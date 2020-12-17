@@ -35,6 +35,8 @@ class RestaurantListPage extends StatelessWidget {
                           title: state.restaurant_data.restaurants[position].name,
                           description: state.restaurant_data.restaurants[position].neighborhood,
                           image: state.restaurant_data.restaurants[position].photograph,
+                          address: state.restaurant_data.restaurants[position].address,
+                          cu_type: state.restaurant_data.restaurants[position].cuisineType,
                         ),
                       ),
                     ),

@@ -5,12 +5,15 @@ import 'package:loyal/blocs/smartAPI.dart';
 import 'package:loyal/pages/home.dart';
 import 'package:loyal/pages/signup.dart';
 import 'package:loyal/resources/my_colors.dart';
+import 'package:loyal/utils/utils.dart';
 import 'package:loyal/widgets/custom_appbar.dart';
 import 'package:loyal/widgets/dialog_progress.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:web3dart/credentials.dart';
 import 'package:web3dart/crypto.dart';
 import 'package:hex/hex.dart';
+
+import '../main.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -264,7 +267,7 @@ class _LoginPageState extends State<LoginPage> {
 
       // print("private keys regained : "+ thehexx);
       // Credentials credentials = EthPrivateKey.fromHex(theEntropy);
-
+          await sharedPreferences.setString(Keys.P_KEY, theEntropy);
           final credentials = await ethClient.credentialsFromPrivateKey(theEntropy);
           final address = await credentials.extractAddress();
           String publicaddress = address.hex;

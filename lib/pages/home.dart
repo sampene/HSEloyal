@@ -7,7 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loyal/blocs/login/login_bloc.dart';
 import 'package:loyal/blocs/smartAPI.dart';
 import 'package:loyal/blocs/userinfo/user_info_bloc.dart';
+import 'package:loyal/models/restaurant_data.dart';
 import 'package:loyal/models/userinfo_response.dart';
+import 'package:loyal/network/api.dart';
 import 'package:loyal/pages/login.dart';
 import 'package:loyal/pages/restaurantslist.dart';
 import 'package:loyal/pages/signup.dart';
@@ -19,6 +21,7 @@ import 'package:loyal/utils/utils.dart';
 import 'package:loyal/widgets/custom_appbar.dart';
 import 'package:loyal/widgets/custom_appbar_logout.dart';
 import 'package:loyal/widgets/dialog_progress.dart';
+import 'package:loyal/widgets/homepge_featured.dart';
 import 'package:loyal/widgets/qr_canner.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:http/http.dart' as http;
@@ -39,12 +42,27 @@ bool _isVisible = true;
 String lastTransactionHash;
 String balance;
 GlobalKey<ConvexAppBarState> _appBarKey = GlobalKey<ConvexAppBarState>();
-
+String publicaddress;
 class _HomePageState extends State<HomePage> {
+  AppAPI api;
+  Restaurant_Data restaurantData;
+
+
   @override
   void initState() {
     _getUser();
+    gettheRestaurants();
+    few();
     super.initState();
+  }
+
+  few() async{
+    String pkey = await sharedPreferences.getString(Keys.P_KEY);
+    // final credentials = await ethClient.credentialsFromPrivateKey(pkey);
+    final credentials = await ethClient.credentialsFromPrivateKey("3afe01d2fd19fbce288f880e8d3cc7e62d189827d88bb3b1a8548b34c39056a8");
+    final address = await credentials.extractAddress();
+    publicaddress = address.hex;
+    print(publicaddress);
   }
 
   Widget _loadedWidget = CircularProgressIndicator();
@@ -104,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                             return _loadedWidget;
                           }
                         })
-
+                        //
                         // FutureBuilder(
                         //   future: getBalance(
                         //       "0x42Ab9c9E8BDBB7bACA96C8ea6aa252e72D8004D2"),
@@ -190,7 +208,7 @@ class _HomePageState extends State<HomePage> {
             borderRadius: BorderRadius.all(Radius.circular(10)),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                  color: MyColors.backgroundColor.withOpacity(0.1),
+                  color: MyColors.backgroundColor.withOpacity(1),
                   offset: const Offset(1.1, 1.1),
                   blurRadius: 10.0),
             ],
@@ -225,10 +243,20 @@ class _HomePageState extends State<HomePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "${userInfoResponse.data.balance}",
-                          style: TextStyle(fontFamily: "bebas", fontSize: 40),
+                        FutureBuilder(
+                          future: getBalance(
+                              publicaddress),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Text('${snapshot.data[0]}', style: TextStyle(fontFamily: "bebas", fontSize: 40),);
+                            } else
+                              return Text('--');
+                          },
                         ),
+                        // Text(
+                        //   "${userInfoResponse.data.balance}",
+                        //   style: TextStyle(fontFamily: "bebas", fontSize: 40),
+                        // ),
                       ],
                     ),
                     Row(
@@ -245,6 +273,33 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
+        // FutureBuilder(
+        //   future: getBalance(
+        //       publicaddress),
+        //   builder: (context, snapshot) {
+        //     if (snapshot.hasData) {
+        //       return Text(
+        //           'You have this many Coins ${snapshot.data[0]}');
+        //     } else
+        //       return Text('Loading...');
+        //   },
+        // ),
+        Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: Text("Featured Cafe for the day.", style: TextStyle(fontFamily: "Bebas", fontSize: 22),),
+        ),
+        FeaturedCafes(restaurantData)
+
+    // RaisedButton(
+    //   child: Text("Send some Coins"),
+    //   onPressed: () async {
+    //     var result = await sendCoin("0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B", 1);
+    //     // var result = await sendCoin("0x8ea89c630873a648adc188eca4ff919197f06dc2", 1);
+    //     setState(() {
+    //       lastTransactionHash = result;
+    //     });
+    //   },
+    // ),
 
       ],
     );
@@ -271,6 +326,12 @@ class _HomePageState extends State<HomePage> {
             ],
           );
         });
+  }
+
+
+  gettheRestaurants() async {
+    api = new AppAPI();
+    restaurantData = await api.getRestaurants(http.Client());
   }
 
   void _getUser() {
@@ -312,7 +373,7 @@ class _HomePageState extends State<HomePage> {
                       builder: (context) {
                         return DialogProgress("Logging out...");
                       });
-                  sharedPreferences.remove(Keys.FIRST_TIME).then((value) {
+                  sharedPreferences.clear().then((value) {
                     Navigator.pop(context);
                     if (value) {
                       Navigator.pushReplacement(context,

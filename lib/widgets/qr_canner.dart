@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loyal/blocs/restaurants/restaurants_bloc.dart';
+import 'package:loyal/blocs/smartAPI.dart';
 import 'package:loyal/models/qr_data.dart';
 import 'package:loyal/models/restaurant_data.dart';
 import 'package:loyal/network/api.dart';
@@ -36,13 +37,13 @@ class _QRScannerState extends State<QRScanner> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   AppAPI api;
   Restaurant_Data restaurantData;
+  String btn = "CONTINUE";
 
   @override
   void initState() {
     gettheRestaurants();
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +62,6 @@ class _QRScannerState extends State<QRScanner> {
               cutOutSize: 350,
             ),
           ),
-          Padding(padding: EdgeInsets.all(8.0),child: Text('$qrText',style: TextStyle(backgroundColor: Colors.green, color: Colors.white, fontSize: 12),)),
           Positioned(
             bottom: 60,
             left: width - 75,
@@ -77,8 +77,14 @@ class _QRScannerState extends State<QRScanner> {
                         backgroundColor: MyColors.heavyblueblack,
                         child: IconButton(
                           icon: (cameraState == frontCamera)
-                              ? Icon(Icons.camera_rear, color: Colors.white,)
-                              : Icon(Icons.camera_front, color: Colors.white,),
+                              ? Icon(
+                                  Icons.camera_rear,
+                                  color: Colors.white,
+                                )
+                              : Icon(
+                                  Icons.camera_front,
+                                  color: Colors.white,
+                                ),
                           onPressed: () {
                             if (controller != null) {
                               controller.flipCamera();
@@ -95,14 +101,22 @@ class _QRScannerState extends State<QRScanner> {
                           },
                         ),
                       ),
-                      SizedBox(width: 30,),
+                      SizedBox(
+                        width: 30,
+                      ),
                       CircleAvatar(
                         radius: 30,
                         backgroundColor: MyColors.heavyblueblack,
                         child: IconButton(
                           icon: (flashState == flashOn)
-                              ? Icon(Icons.flash_off,color: Colors.white,)
-                              : Icon(Icons.flash_on, color: Colors.white,),
+                              ? Icon(
+                                  Icons.flash_off,
+                                  color: Colors.white,
+                                )
+                              : Icon(
+                                  Icons.flash_on,
+                                  color: Colors.white,
+                                ),
                           onPressed: () {
                             if (controller != null) {
                               controller.toggleFlash();
@@ -144,7 +158,8 @@ class _QRScannerState extends State<QRScanner> {
     controller.scannedDataStream.listen((scanData) {
       setState(() {
         qrText = scanData;
-        if(!showingPopup){
+        if (!showingPopup) {
+          controller.pauseCamera();
           loadpopup(qrText);
         }
       });
@@ -156,69 +171,158 @@ class _QRScannerState extends State<QRScanner> {
     QR_Data rr = QR_Data.fromJson(parsed);
     return rr;
   }
-  Restaurants getRestaurantNameByAddress(String address){
-    for(var restaurant in restaurantData.restaurants){
-      if(restaurant.ethAddress == address){
+
+  Restaurants getRestaurantNameByAddress(String address) {
+    for (var restaurant in restaurantData.restaurants) {
+      if (restaurant.ethAddress == address) {
         return restaurant;
       }
     }
   }
-
-  loadpopup(String qrtext) async{
-    QR_Data data = parseQRData(qrtext);
-
-    Restaurants rr = getRestaurantNameByAddress(data.address);
-
-    showingPopup = true;
+Widget displayBadQR(){
     final CustomSweetSheet _sweetSheet = CustomSweetSheet();
     _sweetSheet.show(
-      context: context,
+        context: context,
       description: StyledText(
-        text: '<boldgrey>Total Sum: ${data.sum} Rubles</boldgrey> '
-            '<br/><boldgrey>Points to gain: ${data.cashBack} points,</boldgrey>'
-            '<br/> Click continue to make purchase or cancel to cancel purchase.'
-        ,
+        text:
+        '<boldgrey>Invalid QR Code Scanned. Check the QR Code and scan again.</heavyblueblack> ',
         styles: {
           'boldgrey': TextStyle(
-              // fontFamily: "Fatface",
               fontSize: 18,
               color: MyColors.primaryColor),
           'heavyblueblack': TextStyle(
-              // fontFamily: "Bebas",
               fontSize: 20,
               color: MyColors.heavyblueblack),
         },
       ),
-      title: Text('${rr.name} (${rr.neighborhood})', style: TextStyle(color: MyColors.heavyblueblack),),
-      color: CustomBottomSheetColor(
-        main: Colors.white,
-        accent: MyColors.green,
-        icon: MyColors.green,
-      ),
-      icon: Icons.local_cafe,
-      positive: CustomSweetSheetAction(
-        onPressed: () {
-          Navigator.of(context).pop();
-          showingPopup = false;
-        },
-        title: 'CONTINUE',
-      ),
-      negative: CustomSweetSheetAction(
-        onPressed: () {
-          Navigator.of(context).pop();
-          showingPopup = false;
-        },
-        title: 'CANCEL',
-      ),
-    );
+        color: CustomBottomSheetColor(
+          main: Colors.white,
+          accent: Color(0xffFF8C00),
+          icon: Color(0xffF55932),
+        ),
+        icon: Icons.error,
+        positive: CustomSweetSheetAction(
+          onPressed: () {
+            controller.resumeCamera();
+            Navigator.of(context).pop();
+          },
+          title: 'RETRY',
+        ));
+
+}
+
+  Widget displaySuccessPopup(){
+    final CustomSweetSheet _sweetSheet = CustomSweetSheet();
+    _sweetSheet.show(
+        context: context,
+        description: StyledText(
+          text:
+          '<boldgrey>Transaction successful.</heavyblueblack> ',
+          styles: {
+            'boldgrey': TextStyle(
+                fontSize: 18,
+                color: MyColors.primaryColor),
+            'heavyblueblack': TextStyle(
+                fontSize: 20,
+                color: MyColors.heavyblueblack),
+          },
+        ),
+        color: CustomBottomSheetColor(
+          main: Colors.white,
+          accent: MyColors.green,
+          icon: MyColors.green,
+        ),
+        icon: Icons.check,
+        positive: CustomSweetSheetAction(
+          onPressed: () {
+            controller.resumeCamera();
+            Navigator.of(context).pop();
+          },
+          title: 'RETRY',
+        ));
+
   }
 
+
+  loadpopup(String qrtext) async {
+    try {
+      QR_Data data = parseQRData(qrtext);
+
+      if (data != null) {
+        Restaurants rr = getRestaurantNameByAddress(data.address);
+
+        showingPopup = true;
+        final CustomSweetSheet _sweetSheet = CustomSweetSheet();
+        _sweetSheet.show(
+          context: context,
+          description: StyledText(
+            text:
+            '<boldgrey>Total Sum: </boldgrey><heavyblueblack>${data.sum}</heavyblueblack> '
+                '<br/><boldgrey>Points to gain:</boldgrey><heavyblueblack> ${data.cashBack} points,</heavyblueblack>'
+                '<br/> Click continue to make purchase or cancel to cancel purchase.',
+            styles: {
+              'boldgrey': TextStyle(
+                // fontFamily: "Fatface",
+                  fontSize: 18,
+                  color: MyColors.primaryColor),
+              'heavyblueblack': TextStyle(
+                // fontFamily: "Bebas",
+                  fontSize: 20,
+                  color: MyColors.heavyblueblack),
+            },
+          ),
+          title: Text(
+            '${rr.name} (${rr.neighborhood})',
+            style: TextStyle(color: MyColors.heavyblueblack),
+          ),
+          color: CustomBottomSheetColor(
+            main: Colors.white,
+            accent: MyColors.green,
+            icon: MyColors.green,
+          ),
+          icon: Icons.local_cafe,
+          positive: CustomSweetSheetAction(
+            onPressed: () async {
+              Navigator.of(context).pop();
+              showingPopup = false;
+              sendtoRestaurant(rr.ethAddress, data.sum);
+            },
+            title: btn,
+          ),
+          negative: CustomSweetSheetAction(
+            onPressed: () {
+              controller.resumeCamera();
+              Navigator.of(context).pop();
+              showingPopup = false;
+            },
+            title: 'CANCEL',
+          ),
+        );
+      }
+      else displayBadQR();
+
+    } catch (e) {
+      print(e);
+      displayBadQR();
+    }
+
+
+  }
+
+  sendtoRestaurant(String address, int amt) async {
+    setState(() {
+      btn = 'Please Wait';
+    });
+     await sendCoin(address, amt).then((value) =>
+         Navigator.of(context).pop()
+     );
+     displaySuccessPopup();
+  }
 
   gettheRestaurants() async {
     api = new AppAPI();
     restaurantData = await api.getRestaurants(http.Client());
-}
-
+  }
 
   @override
   void dispose() {

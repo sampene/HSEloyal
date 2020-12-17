@@ -2,8 +2,8 @@
   "restaurants": [
     {
       "id": 1,
-      "name": "Mission Chinese Food",
-      "neighborhood": "Manhattan",
+      "name": "Starbucks",
+      "neighborhood": "Downtown Moscow",
       "photograph": "http://urbusinessnetwork.com/wp-content/uploads/2019/09/Coffeeshop-Tips-Cover.jpg",
       "address": "171 E Broadway, New York, NY 10002",
       "eth_address": "0x7087aBB62FAA59E70c5C7ae6F24bCbf3bD61D400",
@@ -11,7 +11,7 @@
         "lat": 40.713829,
         "lng": -73.989667
       },
-      "cuisine_type": "Asian",
+      "cuisine_type": "Coffee, Ice cream, Wine",
       "operating_hours": {
         "Monday": "5:30 pm - 11:00 pm",
         "Tuesday": "5:30 pm - 12:00 am",
@@ -44,8 +44,8 @@
     },
     {
       "id": 2,
-      "name": "Emily",
-      "neighborhood": "Brooklyn",
+      "name": "Dodo's Joint",
+      "neighborhood": "Patriarshy Ponds",
       "photograph": "https://bigseventravel.com/wp-content/uploads/2019/08/david-bowie-cafe.jpg",
       "address": "919 Fulton St, Brooklyn, NY 11238",
       "eth_address": "0xa81e3856aA3a26a7CA1d078Dc6402Cab17211fc9",
@@ -53,7 +53,7 @@
         "lat": 40.683555,
         "lng": -73.966393
       },
-      "cuisine_type": "Pizza",
+      "cuisine_type": "Pizza, Coffee, Water",
       "operating_hours": {
         "Monday": "5:30 pm - 11:00 pm",
         "Tuesday": "5:30 pm - 11:00 pm",
@@ -95,7 +95,7 @@
         "lat": 40.747143,
         "lng": -73.985414
       },
-      "cuisine_type": "Asian",
+      "cuisine_type": "Alchoholic drinks",
       "operating_hours": {
         "Monday": "11:30 am - 2:00 am",
         "Tuesday": "11:30 am - 2:00 am",
@@ -129,15 +129,15 @@
     {
       "id": 4,
       "name": "Katz's Delicatessen",
-      "neighborhood": "Manhattan",
+      "neighborhood": "Pokrovsky Blvd",
       "photograph": "https://bigseventravel.com/wp-content/uploads/2019/08/SOS-cafe.jpg",
-      "address": "205 E Houston St, New York, NY 10002",
+      "address": "205 E KS 10002",
       "eth_address": "",
       "latlng": {
         "lat": 40.722216,
         "lng": -73.987501
       },
-      "cuisine_type": "American",
+      "cuisine_type": "Exotic drinks",
       "operating_hours": {
         "Monday": "8:00 am - 10:30 pm",
         "Tuesday": "8:00 am - 10:30 pm",
@@ -170,16 +170,16 @@
     },
     {
       "id": 5,
-      "name": "Roberta's Pizza",
-      "neighborhood": "Brooklyn",
+      "name": "Best in City Cafe",
+      "neighborhood": "Accra",
       "photograph": "https://bigseventravel.com/wp-content/uploads/2019/08/vogue-cafe.jpg",
-      "address": "261 Moore St, Brooklyn, NY 11206",
+      "address": "261 Adenta St, Madina",
       "eth_address": "",
       "latlng": {
         "lat": 40.705089,
         "lng": -73.933585
       },
-      "cuisine_type": "Pizza",
+      "cuisine_type": "General Drinks",
       "operating_hours": {
         "Monday": "11:00 am - 12:00 am",
         "Tuesday": "11:00 am - 12:00 am",
@@ -212,16 +212,16 @@
     },
     {
       "id": 6,
-      "name": "Hometown BBQ",
-      "neighborhood": "Brooklyn",
+      "name": "Hometown Cafetaria",
+      "neighborhood": "Mosscow",
       "photograph": "https://bigseventravel.com/wp-content/uploads/2019/08/west-4-coffee-brew-bar.jpg",
-      "address": "454 Van Brunt St, Brooklyn, NY 11231",
+      "address": "454 Van Elavsky St, Moscow, NY 11231",
       "eth_address": "",
       "latlng": {
         "lat": 40.674925,
         "lng": -74.016162
       },
-      "cuisine_type": "American",
+      "cuisine_type": "American Drinks",
       "operating_hours": {
         "Monday": "Closed",
         "Tuesday": "12:00 pm - 10:00 pm",
@@ -254,16 +254,16 @@
     },
     {
       "id": 7,
-      "name": "Superiority Burger",
-      "neighborhood": "Manhattan",
+      "name": "Superiority Takeouts",
+      "neighborhood": "Spb",
       "photograph": "https://bigseventravel.com/wp-content/uploads/2019/08/kooperativ-chernyy.png",
-      "address": "430 E 9th St, New York, NY 10009",
+      "address": "430 E 9th St Pbg, Ru, 10009",
       "eth_address": "",
       "latlng": {
         "lat": 40.727397,
         "lng": -73.983645
       },
-      "cuisine_type": "American",
+      "cuisine_type": "Fruit Smoothies",
       "operating_hours": {
         "Monday": "11:30 am - 10:00 pm",
         "Tuesday": "Closed",
@@ -297,15 +297,15 @@
     {
       "id": 8,
       "name": "The Dutch",
-      "neighborhood": "Manhattan",
+      "neighborhood": "Tverskaya-Kremlin",
       "photograph": "https://331mrnu3ylm2k3db3s1xd1hg-wpengine.netdna-ssl.com/wp-content/uploads/2015/06/Sprudge-Bolsche.StPete-Darya-1.jpg",
-      "address": "131 Sullivan St, New York, NY 10012",
+      "address": "131 Tverskaya-Kremlin St, Moscow",
       "eth_address": "",
       "latlng": {
         "lat": 40.726584,
         "lng": -74.002082
       },
-      "cuisine_type": "American",
+      "cuisine_type": "Coffee",
       "operating_hours": {
         "Monday": "11:30 am - 3:00 pm, 5:30 pm - 11:00 pm",
         "Tuesday": "11:30 am - 3:00 pm, 5:30 pm - 11:00 pm",
@@ -339,15 +339,15 @@
     {
       "id": 9,
       "name": "Mu Ramen",
-      "neighborhood": "Queens",
+      "neighborhood": "Belgorod",
       "photograph": "https://331mrnu3ylm2k3db3s1xd1hg-wpengine.netdna-ssl.com/wp-content/uploads/2015/06/Sprudge-CityCoffee.StPete-Darya-4.jpg",
-      "address": "1209 Jackson Ave, Queens, NY 11101",
+      "address": "1209 BG Ave1",
       "eth_address": "",
       "latlng": {
         "lat": 40.743797,
         "lng": -73.950652
       },
-      "cuisine_type": "Asian",
+      "cuisine_type": "Exotic",
       "operating_hours": {
         "Monday": "5:00 pm - 10:00 pm",
         "Tuesday": "5:00 pm - 10:00 pm",
@@ -380,16 +380,16 @@
     },
     {
       "id": 10,
-      "name": "Casa Enrique",
+      "name": "Jing Xu Spot",
       "neighborhood": "Queens",
       "photograph": "https://331mrnu3ylm2k3db3s1xd1hg-wpengine.netdna-ssl.com/wp-content/uploads/2015/06/Sprudge-CityCoffee.StPete-Darya-6.jpg",
-      "address": "5-48 49th Ave, Queens, NY 11101",
+      "address": "5-48 49th Ave, MSK",
       "eth_address": "",
       "latlng": {
         "lat": 40.743394,
         "lng": -73.954235
       },
-      "cuisine_type": "Mexican",
+      "cuisine_type": "Chinese cuisines",
       "operating_hours": {
         "Monday": "5:00 pm - 12:00 am",
         "Tuesday": "5:00 pm - 12:00 am",
